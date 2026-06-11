@@ -345,7 +345,7 @@ export default function App() {
       />
       {/* Voice button - position determined by panelStartPosition setting */}
       <div
-        className={`${isRecording || isProcessing ? "bottom-6" : "bottom-0"} fixed z-50 transition-[bottom] duration-300 ease-out ${
+        className={`fixed bottom-6 z-50 ${
           panelStartPosition === "bottom-left"
             ? "left-2"
             : panelStartPosition === "center"

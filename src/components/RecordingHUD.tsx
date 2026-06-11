@@ -45,8 +45,8 @@ export default function RecordingHUD({ isRecording, isProcessing, align = "right
         : "right-2";
 
   return (
-    <div className={`fixed bottom-2 z-50 pointer-events-none ${alignClass}`}>
-      <span className="text-[11px] font-mono tabular-nums text-white/40 min-w-[3ch] text-center block">
+    <div className={`fixed bottom-2 z-50 pointer-events-none w-10 ${alignClass}`}>
+      <span className="text-[11px] font-mono tabular-nums text-white/40 text-center block">
         {formatDuration(duration)}
       </span>
     </div>
