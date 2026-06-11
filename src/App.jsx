@@ -1,52 +1,13 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./index.css";
-import { X } from "lucide-react";
+import { X, Mic } from "lucide-react";
 import { useToast } from "./components/ui/useToast";
-import { LoadingDots } from "./components/ui/LoadingDots";
 import { useHotkey } from "./hooks/useHotkey";
 import { formatHotkeyLabel } from "./utils/hotkeys";
 import { useWindowDrag } from "./hooks/useWindowDrag";
 import { useAudioRecording } from "./hooks/useAudioRecording";
 import { useSettingsStore } from "./stores/settingsStore";
-import RecordingHUD from "./components/RecordingHUD";
-
-// Sound Wave Icon Component (for idle/hover states)
-const SoundWaveIcon = ({ size = 16 }) => {
-  return (
-    <div className="flex items-center justify-center gap-1">
-      <div
-        className={`bg-white rounded-full`}
-        style={{ width: size * 0.25, height: size * 0.6 }}
-      ></div>
-      <div className={`bg-white rounded-full`} style={{ width: size * 0.25, height: size }}></div>
-      <div
-        className={`bg-white rounded-full`}
-        style={{ width: size * 0.25, height: size * 0.6 }}
-      ></div>
-    </div>
-  );
-};
-
-// Voice Wave Animation Component (for processing state)
-const VoiceWaveIndicator = ({ isListening }) => {
-  return (
-    <div className="flex items-center justify-center gap-0.5">
-      {[...Array(4)].map((_, i) => (
-        <div
-          key={i}
-          className={`w-0.5 bg-white rounded-full transition-[height] duration-150 ${
-            isListening ? "animate-pulse h-4" : "h-2"
-          }`}
-          style={{
-            animationDelay: isListening ? `${i * 0.1}s` : "0s",
-            animationDuration: isListening ? `${0.6 + i * 0.1}s` : "0s",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
 
 // Tooltip Component
 const Tooltip = ({ children, content, emoji, align = "center" }) => {
@@ -332,20 +293,9 @@ export default function App() {
         transition: "background 0.25s ease-out",
       }}
     >
-      <RecordingHUD
-        isRecording={isRecording}
-        isProcessing={isProcessing}
-        align={
-          panelStartPosition === "bottom-left"
-            ? "left"
-            : panelStartPosition === "center"
-              ? "center"
-              : "right"
-        }
-      />
       {/* Voice button - position determined by panelStartPosition setting */}
       <div
-        className={`fixed bottom-6 z-50 ${
+        className={`fixed bottom-0 z-50 ${
           panelStartPosition === "bottom-left"
             ? "left-2"
             : panelStartPosition === "center"
@@ -460,22 +410,23 @@ export default function App() {
               ></div>
 
               {/* Dynamic content based on state */}
-              {micState === "idle" || micState === "hover" ? (
-                <SoundWaveIcon size={micState === "idle" ? 12 : 14} />
-              ) : micState === "recording" ? (
-                <LoadingDots />
-              ) : micState === "processing" ? (
-                <VoiceWaveIndicator isListening={true} />
-              ) : null}
+              <Mic
+                size={micState === "idle" ? 16 : 18}
+                strokeWidth={1.5}
+                className={`transition-all duration-300 ${
+                  micState === "recording"
+                    ? "text-white animate-pulse"
+                    : micState === "processing"
+                      ? "text-white/50 animate-spin"
+                      : micState === "hover"
+                        ? "text-white"
+                        : "text-white/80"
+                }`}
+              />
 
-              {/* State indicator ring for recording */}
+              {/* Recording dot indicator */}
               {micState === "recording" && (
-                <div className="absolute inset-0 rounded-full border-2 border-primary/50 animate-pulse"></div>
-              )}
-
-              {/* State indicator ring for processing */}
-              {micState === "processing" && (
-                <div className="absolute inset-0 rounded-full border-2 border-primary/30 opacity-50"></div>
+                <span className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full shadow-md" />
               )}
             </button>
           </Tooltip>
