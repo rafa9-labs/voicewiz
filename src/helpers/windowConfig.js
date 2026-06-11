@@ -155,7 +155,7 @@ const TRANSCRIPTION_PREVIEW_CONFIG = {
 class WindowPositionUtil {
   static getMainWindowPosition(display, customSize = null, position = "bottom-right") {
     const { width, height } = customSize || WINDOW_SIZES.BASE;
-    const MARGIN = 4;
+    const MARGIN = 0;
     const workArea = display.workArea || display.bounds;
 
     let x, y;

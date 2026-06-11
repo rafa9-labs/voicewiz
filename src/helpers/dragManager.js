@@ -72,24 +72,16 @@ class DragManager {
       const newX = cursorPos.x - this.dragOffset.x;
       const newY = cursorPos.y - this.dragOffset.y;
 
-      // Get screen bounds to keep window visible
-      const display = screen.getDisplayNearestPoint(cursorPos);
-      const bounds = display.workArea;
-
-      // Get window size for boundary calculations
       const windowBounds = this.targetWindow.getBounds();
+      const windowWidth = windowBounds.width;
+      const windowHeight = windowBounds.height;
 
-      // Constrain to screen bounds
-      const constrainedX = Math.max(
-        bounds.x,
-        Math.min(newX, bounds.x + bounds.width - windowBounds.width)
-      );
-      const constrainedY = Math.max(
-        bounds.y,
-        Math.min(newY, bounds.y + bounds.height - windowBounds.height)
-      );
+      const primaryDisplay = screen.getPrimaryDisplay();
+      const workArea = primaryDisplay.workArea;
 
-      this.targetWindow.setPosition(constrainedX, constrainedY);
+      const constrainedY = Math.min(newY, workArea.y + workArea.height - windowHeight);
+
+      this.targetWindow.setPosition(newX, constrainedY);
     } catch (error) {
       console.error("Error updating window position:", error);
       this.stopWindowDrag();

@@ -343,7 +343,6 @@ export default function App() {
                 setIsCommandMenuOpen(false);
                 setDragStartPos({ x: e.clientX, y: e.clientY });
                 setHasDragged(false);
-                handleMouseDown(e);
               }}
               onMouseMove={(e) => {
                 if (dragStartPos && !hasDragged) {
@@ -352,8 +351,8 @@ export default function App() {
                       Math.pow(e.clientY - dragStartPos.y, 2)
                   );
                   if (distance > 5) {
-                    // 5px threshold for drag
                     setHasDragged(true);
+                    handleMouseDown(e);
                   }
                 }
               }}

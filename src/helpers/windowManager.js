@@ -142,44 +142,24 @@ class WindowManager {
     }
 
     const newSize = WINDOW_SIZES[sizeKey] || WINDOW_SIZES.BASE;
-    const currentBounds = this.mainWindow.getBounds();
+    const b = this.mainWindow.getBounds();
     const position = this._panelStartPosition;
-    const MARGIN = sizeKey === "RECORDING" ? 60 : 4;
-
-    const display = screen.getDisplayNearestPoint({
-      x: currentBounds.x + currentBounds.width / 2,
-      y: currentBounds.y + currentBounds.height,
-    });
-    const workArea = display.workArea || display.bounds;
 
     let newX, newY;
 
     if (position === "bottom-left") {
-      // Anchor bottom-left corner: keep x, expand rightward and upward
-      newX = currentBounds.x;
-      newY = currentBounds.y + currentBounds.height - newSize.height;
+      newX = b.x;
+      newY = b.y + b.height - newSize.height;
     } else if (position === "center") {
-      // Anchor bottom-center: expand symmetrically and upward
-      const centerX = currentBounds.x + currentBounds.width / 2;
-      newX = centerX - newSize.width / 2;
-      newY = currentBounds.y + currentBounds.height - newSize.height;
+      newX = b.x + b.width / 2 - newSize.width / 2;
+      newY = b.y + b.height - newSize.height;
     } else {
-      // bottom-right (default): anchor bottom-right corner, expand leftward and upward
-      const bottomRightX = currentBounds.x + currentBounds.width;
-      newX = bottomRightX - newSize.width;
-      newY = currentBounds.y + currentBounds.height - newSize.height;
+      // bottom-right
+      newX = b.x + b.width - newSize.width;
+      newY = b.y + b.height - newSize.height;
     }
 
-    // Clamp to work area
-    newX = Math.max(workArea.x, Math.min(newX, workArea.x + workArea.width - newSize.width - MARGIN));
-    newY = Math.max(workArea.y, Math.min(newY, workArea.y + workArea.height - newSize.height - MARGIN));
-
-    this.mainWindow.setBounds({
-      x: newX,
-      y: newY,
-      width: newSize.width,
-      height: newSize.height,
-    });
+    this.mainWindow.setBounds({ x: newX, y: newY, width: newSize.width, height: newSize.height });
 
     return { success: true, bounds: { x: newX, y: newY, ...newSize } };
   }
