@@ -310,7 +310,7 @@ class IPCHandlers {
     this.speakerDiarizationEnabled = true;
     this.activeMeetingSpeakerConfig = null;
     this.whisperVadSettings = {
-      dictationSileroEnabled: true,
+      dictationSileroEnabled: false,
       noteRecordingSileroEnabled: true,
       meetingSileroEnabled: true,
       ...DEFAULT_WHISPER_VAD_CONFIG,
@@ -5937,10 +5937,25 @@ class IPCHandlers {
     );
 
     ipcMain.handle("cloud-usage", async (event) => {
-      try {
-        const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+      const apiUrl = getApiUrl();
+      if (!apiUrl) {
+        return {
+          success: true,
+          wordsUsed: 0,
+          wordsRemaining: 999999,
+          limit: 999999,
+          plan: "local",
+          status: "active",
+          isSubscribed: false,
+          isTrial: false,
+          trialDaysLeft: null,
+          currentPeriodEnd: null,
+          billingInterval: null,
+          resetAt: null,
+        };
+      }
 
+      try {
         const authHeader = await getAuthHeader(event);
         if (!Object.keys(authHeader).length) throw new Error("Not authenticated");
 
@@ -6118,10 +6133,10 @@ class IPCHandlers {
     });
 
     ipcMain.handle("get-stt-config", async (event) => {
-      try {
-        const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+      const apiUrl = getApiUrl();
+      if (!apiUrl) return { success: false, error: "no-api" };
 
+      try {
         const authHeader = await getAuthHeader(event);
         if (!Object.keys(authHeader).length) throw new Error("Not authenticated");
 
@@ -6148,10 +6163,10 @@ class IPCHandlers {
     });
 
     ipcMain.handle("get-note-recording-config", async (event) => {
-      try {
-        const apiUrl = getApiUrl();
-        if (!apiUrl) throw new Error("OpenWhispr API URL not configured");
+      const apiUrl = getApiUrl();
+      if (!apiUrl) return { success: false, error: "no-api" };
 
+      try {
         const authHeader = await getAuthHeader(event);
         if (!Object.keys(authHeader).length) throw new Error("Not authenticated");
 

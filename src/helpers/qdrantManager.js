@@ -189,7 +189,7 @@ class QdrantManager {
         return;
       }
       if (!(await this._checkHealth())) {
-        debugLogger.warn("qdrant health check failed");
+        debugLogger.debug("qdrant health check failed");
         this.ready = false;
       }
     }, HEALTH_CHECK_INTERVAL_MS);

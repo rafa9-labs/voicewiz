@@ -22,6 +22,7 @@ const parseDevServerPort = (rawPort) => {
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
+
   const envDir = path.resolve(__dirname, "..");
   const env = loadEnv(mode, envDir, "");
   const rawPort = env.VITE_DEV_SERVER_PORT || env.OPENWHISPR_DEV_SERVER_PORT;

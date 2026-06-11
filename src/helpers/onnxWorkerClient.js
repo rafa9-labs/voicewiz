@@ -64,7 +64,7 @@ class OnnxWorkerClient {
       const forwardStderr = (chunk) => {
         const text = chunk.toString();
         for (const line of text.split(/\r?\n/)) {
-          if (line) debugLogger.warn("onnx worker stderr", { line });
+          if (line) debugLogger.debug("onnx worker stderr", { line });
         }
       };
       child.stderr?.on("data", forwardStderr);

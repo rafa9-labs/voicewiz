@@ -3,6 +3,7 @@ const EventEmitter = require("events");
 const fs = require("fs");
 const path = require("path");
 const http = require("http");
+const whisperHttpAgent = new http.Agent({ keepAlive: true, maxSockets: 1 });
 const { app } = require("electron");
 const debugLogger = require("./debugLogger");
 const { killProcess } = require("../utils/process");
@@ -238,7 +239,7 @@ class WhisperServerManager extends EventEmitter {
 
     const reachable = await new Promise((resolve) => {
       const req = http.request(
-        { hostname, port, path: "/", method: "GET", timeout: HEALTH_CHECK_TIMEOUT_MS },
+        { hostname, port, path: "/", method: "GET", timeout: HEALTH_CHECK_TIMEOUT_MS, agent: whisperHttpAgent },
         (res) => {
           resolve(true);
           res.resume();
@@ -335,11 +336,16 @@ class WhisperServerManager extends EventEmitter {
       spawnEnv.CUDA_VISIBLE_DEVICES = process.env.TRANSCRIPTION_GPU_INDEX;
     }
 
+    // Only set CPU threads when NOT using CUDA (whisper.cpp ignores --threads on GPU).
+    // Use all available logical cores with a floor of 4 to prevent single-thread bottlenecks.
+    const effectiveThreads = options.threads
+      || (usingCuda ? undefined : Math.max(4, require("os").cpus().length));
+
     const args = buildWhisperServerArgs({
       modelPath,
       port: this.port,
       language: options.language,
-      threads: options.threads,
+      threads: effectiveThreads,
       vadEnabled: options.vadEnabled === true,
       vadModelPath: options.vadModelPath || null,
       vadConfig: options.vadConfig,
@@ -467,6 +473,7 @@ class WhisperServerManager extends EventEmitter {
           path: "/",
           method: "GET",
           timeout: HEALTH_CHECK_TIMEOUT_MS,
+          agent: whisperHttpAgent,
         },
         (res) => {
           resolve(true);
@@ -583,6 +590,7 @@ class WhisperServerManager extends EventEmitter {
             "Content-Length": body.length,
           },
           timeout: 300000,
+          agent: whisperHttpAgent,
         },
         (res) => {
           let data = "";

@@ -9,6 +9,7 @@ import { formatHotkeyLabel } from "./utils/hotkeys";
 import { useWindowDrag } from "./hooks/useWindowDrag";
 import { useAudioRecording } from "./hooks/useAudioRecording";
 import { useSettingsStore } from "./stores/settingsStore";
+import RecordingHUD from "./components/RecordingHUD";
 
 // Sound Wave Icon Component (for idle/hover states)
 const SoundWaveIcon = ({ size = 16 }) => {
@@ -319,6 +320,7 @@ export default function App() {
 
   return (
     <div className="dictation-window">
+      <RecordingHUD isRecording={isRecording} isProcessing={isProcessing} />
       {/* Voice button - position determined by panelStartPosition setting */}
       <div
         className={`fixed bottom-1 z-50 ${
