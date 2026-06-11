@@ -182,6 +182,10 @@ class WhisperServerManager extends EventEmitter {
     if (options.preferCuda) {
       const ext = process.platform === "win32" ? ".exe" : "";
       const cudaBinary = `whisper-server-${process.platform}-${process.arch}-cuda${ext}`;
+      const bundledPath = process.resourcesPath
+        ? path.join(process.resourcesPath, "bin", cudaBinary)
+        : null;
+      if (bundledPath && fs.existsSync(bundledPath)) return bundledPath;
       const cudaPath = path.join(app.getPath("userData"), "bin", cudaBinary);
       if (fs.existsSync(cudaPath)) return cudaPath;
     }

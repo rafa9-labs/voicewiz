@@ -2,5 +2,9 @@
   "extends": "electron-builder.json",
   "win": {
     "azureSignOptions": null
+  },
+  "mac": {
+    "identity": null,
+    "notarize": false
   }
 }

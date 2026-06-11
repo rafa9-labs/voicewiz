@@ -27,9 +27,19 @@ const CUDA_BINARIES = {
   },
 };
 
-function getUserDataBinDir() {
+function getResourcesBinDir() {
+  return path.join(__dirname, "..", "resources", "bin");
+}
+
+function getOutputDir() {
+  const useResources = process.argv.includes("--resources");
+  if (useResources) {
+    const dir = getResourcesBinDir();
+    fs.mkdirSync(dir, { recursive: true });
+    return dir;
+  }
+
   const appData = process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
-  // Must match the app name in package.json — Electron uses it for userData path
   return path.join(appData, "open-whispr", "bin");
 }
 
@@ -59,8 +69,7 @@ async function main() {
     return;
   }
 
-  const binDir = getUserDataBinDir();
-  fs.mkdirSync(binDir, { recursive: true });
+  const binDir = getOutputDir();
 
   const outputPath = path.join(binDir, config.outputName);
 
