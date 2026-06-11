@@ -712,8 +712,8 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
   assemblyAiStreaming: readBoolean("assemblyAiStreaming", true),
 
   autoGenerateNoteTitle: readBoolean("autoGenerateNoteTitle", true),
-  useCleanupModel: readBoolean("useCleanupModel", true),
-  useDictationAgent: readBoolean("useDictationAgent", true),
+  useCleanupModel: readBoolean("useCleanupModel", false),
+  useDictationAgent: readBoolean("useDictationAgent", false),
   cleanupModel: readString("cleanupModel", ""),
   cleanupProvider: readString("cleanupProvider", ""),
 
