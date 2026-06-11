@@ -1,0 +1,192 @@
+.brand-heading {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.brand-body {
+  font-family: var(--font-family-sans);
+  line-height: 1.6;
+}
+
+.brand-script {
+  font-family: var(--font-family-sans);
+  font-style: italic;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+button {
+  font-family: var(--font-family-sans);
+  cursor: pointer;
+}
+
+button:hover,
+[role="button"]:hover,
+.cursor-pointer:hover,
+button svg:hover,
+[role="button"] svg:hover,
+a svg:hover,
+[data-icon]:hover,
+.icon:hover {
+  cursor: pointer;
+}
+
+input:not(.input-inline),
+textarea:not(.input-inline) {
+  border-radius: var(--radius);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+  font-family: var(--font-family-sans);
+  box-shadow: inset 0 1px 2px oklch(from var(--color-foreground) l c h / 0.06);
+}
+
+:root input:not(.input-inline),
+:root textarea:not(.input-inline) {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+}
+
+:root input:not(.input-inline):focus,
+:root textarea:not(.input-inline):focus {
+  border-color: var(--color-border-active);
+  box-shadow: 0 0 0 2px oklch(from var(--color-ring) l c h / 0.15);
+  background-color: var(--color-background);
+}
+
+.dark input:not(.input-inline),
+.dark textarea:not(.input-inline) {
+  background-color: var(--color-input);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  box-shadow: none;
+}
+
+.dark input:not(.input-inline):focus,
+.dark textarea:not(.input-inline):focus {
+  border-color: var(--color-border-active);
+  box-shadow: 0 0 0 2px oklch(from var(--color-ring) l c h / 0.15);
+}
+
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card, 0 1px 3px oklch(from var(--color-foreground) l c h / 0.08));
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover, 0 4px 12px oklch(from var(--color-foreground) l c h / 0.1));
+  transform: translateY(-1px);
+}
+
+.dark .card {
+  border-color: var(--color-border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.dark .card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: none;
+  border-color: var(--color-border-hover);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--color-link);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.status-active {
+  color: var(--color-brand-accent);
+  font-weight: 600;
+}
+
+.text-brand-primary  { color: var(--color-brand-primary); }
+.text-brand-accent    { color: var(--color-brand-accent); }
+.text-brand-highlight { color: var(--color-brand-highlight); }
+.text-brand-link      { color: var(--color-brand-link); }
+
+.section-panel {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+}
+
+.accent-bar { position: relative; }
+
+.dark .accent-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    oklch(0.65 0.2 260 / 0.5),
+    oklch(0.7 0.18 280 / 0.3),
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.icon-monochrome {
+  filter: none;
+  transition: filter 150ms ease;
+}
+
+.dark .icon-monochrome {
+  filter: invert(1);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+:hover::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+:hover::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
