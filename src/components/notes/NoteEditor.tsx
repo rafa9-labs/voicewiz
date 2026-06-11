@@ -47,6 +47,30 @@ import {
 import NoteParticipants from "./NoteParticipants";
 import type { CalendarAttendee } from "../../types/calendar";
 
+const NOTE_EDITOR_TITLE_PLACEHOLDER = [
+  "text-base font-semibold text-foreground bg-transparent outline-none",
+  "tracking-[-0.01em]",
+  "empty:before:content-[attr(data-placeholder)] empty:before:text-foreground/15 empty:before:pointer-events-none",
+].join(" ");
+
+const NOTE_EDITOR_FOLDER_BUTTON = [
+  "inline-flex items-center gap-1.5 text-[11px] px-1.5 py-0.5 rounded-md",
+  "border border-border/70 dark:border-white/25",
+  "text-foreground/50 dark:text-foreground/35",
+  "hover:text-foreground/60 hover:border-border/60 hover:bg-foreground/3",
+  "dark:hover:text-foreground/40 dark:hover:border-white/10 dark:hover:bg-white/3",
+  "transition-all duration-150 cursor-pointer outline-none",
+].join(" ");
+
+const NOTE_EDITOR_EXPORT_BUTTON = [
+  "shrink-0 h-6 w-6 flex items-center justify-center rounded-md",
+  "bg-foreground/4 dark:bg-white/5",
+  "text-foreground/50 dark:text-foreground/40",
+  "hover:text-foreground/70 hover:bg-foreground/8",
+  "dark:hover:text-foreground/60 dark:hover:bg-white/8",
+  "transition-colors duration-150",
+].join(" ");
+
 function formatNoteDate(dateStr: string): string {
   const date = normalizeDbDate(dateStr);
   if (Number.isNaN(date.getTime())) return "";
@@ -594,7 +618,7 @@ export default function NoteEditor({
             onKeyDown={handleTitleKeyDown}
             onPaste={handleTitlePaste}
             data-placeholder={t("notes.editor.untitled")}
-            className="text-base font-semibold text-foreground bg-transparent outline-none tracking-[-0.01em] empty:before:content-[attr(data-placeholder)] empty:before:text-foreground/15 empty:before:pointer-events-none"
+            className={NOTE_EDITOR_TITLE_PLACEHOLDER}
             role="textbox"
             aria-label={t("notes.editor.noteTitle")}
           />
@@ -626,7 +650,7 @@ export default function NoteEditor({
                 }}
               >
                 <DropdownMenuTrigger asChild>
-                  <button className="inline-flex items-center gap-1.5 text-[11px] px-1.5 py-0.5 rounded-md border border-border/70 dark:border-white/25 text-foreground/50 dark:text-foreground/35 hover:text-foreground/60 hover:border-border/60 hover:bg-foreground/3 dark:hover:text-foreground/40 dark:hover:border-white/10 dark:hover:bg-white/3 transition-all duration-150 cursor-pointer outline-none">
+                  <button className={NOTE_EDITOR_FOLDER_BUTTON}>
                     <FolderOpen size={11} className="shrink-0" />
                     {folderName || t("notes.editor.noFolder")}
                   </button>
@@ -814,7 +838,7 @@ export default function NoteEditor({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button
-                      className="shrink-0 h-6 w-6 flex items-center justify-center rounded-md bg-foreground/4 dark:bg-white/5 text-foreground/50 dark:text-foreground/40 hover:text-foreground/70 hover:bg-foreground/8 dark:hover:text-foreground/60 dark:hover:bg-white/8 transition-colors duration-150"
+                      className={NOTE_EDITOR_EXPORT_BUTTON}
                       aria-label={t("notes.editor.export")}
                     >
                       <Download size={11} />

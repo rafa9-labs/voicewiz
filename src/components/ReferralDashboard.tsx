@@ -11,6 +11,22 @@ import logger from "../utils/logger";
 const REFERRAL_WORD_GOAL = 2000;
 const RE_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const TRY_AGAIN_BUTTON_CLASSES = [
+  "px-3.5 py-1.5 rounded-md text-xs font-medium bg-foreground/7 text-foreground/55 border border-foreground/5 hover:bg-foreground/12 hover:text-foreground/90 transition-colors duration-200",
+].join(" ");
+
+const TAB_TRIGGER_CLASSES = [
+  "rounded-none! bg-transparent! shadow-none! px-0! pb-2! pt-0! text-xs border-b-2 border-transparent text-foreground/30 hover:text-foreground/50 data-[state=active]:bg-transparent! data-[state=active]:shadow-none! data-[state=active]:border-foreground/50 data-[state=active]:text-foreground",
+].join(" ");
+
+const EMAIL_INPUT_CLASSES = [
+  "flex-1 h-8 px-3 text-xs rounded-md bg-foreground/4 border border-foreground/7 text-foreground/70 placeholder:text-foreground/20 focus:outline-none focus:border-foreground/15 focus:ring-1 focus:ring-foreground/10 disabled:opacity-50",
+].join(" ");
+
+const SEND_BUTTON_CLASSES = [
+  "shrink-0 h-8 px-3.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-[background-color,color,transform] duration-200 bg-foreground/7 text-foreground/55 border border-foreground/5 hover:bg-foreground/12 hover:text-foreground/90 active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none",
+].join(" ");
+
 interface ReferralStats {
   referralCode: string;
   referralLink: string;
@@ -326,7 +342,7 @@ export function ReferralDashboard() {
         <button
           onClick={fetchStats}
           aria-label={t("referral.tryAgain")}
-          className="px-3.5 py-1.5 rounded-md text-xs font-medium bg-foreground/7 text-foreground/55 border border-foreground/5 hover:bg-foreground/12 hover:text-foreground/90 transition-colors duration-200"
+          className={TRY_AGAIN_BUTTON_CLASSES}
         >
           {t("referral.tryAgain")}
         </button>
@@ -360,13 +376,13 @@ export function ReferralDashboard() {
           <TabsList className="w-full justify-start bg-transparent! p-0! h-auto! gap-4 rounded-none! border-b border-foreground/6">
             <TabsTrigger
               value="refer"
-              className="rounded-none! bg-transparent! shadow-none! px-0! pb-2! pt-0! text-xs border-b-2 border-transparent text-foreground/30 hover:text-foreground/50 data-[state=active]:bg-transparent! data-[state=active]:shadow-none! data-[state=active]:border-foreground/50 data-[state=active]:text-foreground"
+              className={TAB_TRIGGER_CLASSES}
             >
               {t("referral.tabs.refer")}
             </TabsTrigger>
             <TabsTrigger
               value="history"
-              className="rounded-none! bg-transparent! shadow-none! px-0! pb-2! pt-0! text-xs border-b-2 border-transparent text-foreground/30 hover:text-foreground/50 data-[state=active]:bg-transparent! data-[state=active]:shadow-none! data-[state=active]:border-foreground/50 data-[state=active]:text-foreground"
+              className={TAB_TRIGGER_CLASSES}
             >
               {t("referral.tabs.pastInvites")} ({invites.length})
             </TabsTrigger>
@@ -451,13 +467,13 @@ export function ReferralDashboard() {
                     onChange={(e) => setEmailInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     disabled={sendingInvite}
-                    className="flex-1 h-8 px-3 text-xs rounded-md bg-foreground/4 border border-foreground/7 text-foreground/70 placeholder:text-foreground/20 focus:outline-none focus:border-foreground/15 focus:ring-1 focus:ring-foreground/10 disabled:opacity-50"
+                    className={EMAIL_INPUT_CLASSES}
                   />
                   <button
                     onClick={sendInvite}
                     disabled={sendingInvite || !emailInput.trim()}
                     aria-label={t("referral.sendInvites.send")}
-                    className="shrink-0 h-8 px-3.5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-[background-color,color,transform] duration-200 bg-foreground/7 text-foreground/55 border border-foreground/5 hover:bg-foreground/12 hover:text-foreground/90 active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none"
+                    className={SEND_BUTTON_CLASSES}
                   >
                     {sendingInvite ? (
                       <div className="w-3 h-3 border-1.5 border-current border-r-transparent rounded-full animate-spin" />

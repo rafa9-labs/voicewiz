@@ -83,6 +83,41 @@ import NotesOnboarding from "./NotesOnboarding";
 const FOLDER_INPUT_CLASS =
   "w-full h-6 bg-foreground/5 dark:bg-white/5 rounded px-2 text-xs text-foreground outline-none border border-primary/30 focus:border-primary/50";
 
+const FOLDER_CONTEXT_TRIGGER_CLASS = [
+  "h-4 w-4 flex items-center justify-center rounded-sm",
+  "opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100",
+  "transition-opacity absolute right-1.5",
+  "text-foreground/25 hover:text-foreground/50 cursor-pointer",
+].join(" ");
+
+const EMPTY_PRIMARY_BUTTON_CLASS = [
+  "flex items-center justify-center gap-1.5 h-6 rounded-md",
+  "bg-primary/8 dark:bg-primary/10 border border-primary/12 dark:border-primary/15",
+  "text-xs font-medium text-primary/70",
+  "hover:bg-primary/12 hover:text-primary hover:border-primary/20 transition-colors",
+].join(" ");
+
+const EMPTY_SECONDARY_BUTTON_CLASS = [
+  "flex items-center justify-center gap-1.5 h-6 rounded-md",
+  "border border-foreground/8 dark:border-white/8",
+  "text-xs text-foreground/40",
+  "hover:text-foreground/60 hover:border-foreground/15 hover:bg-foreground/3 dark:hover:bg-white/3 transition-colors",
+].join(" ");
+
+const WELCOME_PRIMARY_BUTTON_CLASS = [
+  "flex items-center gap-1.5 px-4 h-7 rounded-md",
+  "bg-primary/8 dark:bg-primary/10 border border-primary/12 dark:border-primary/15",
+  "text-xs font-medium text-primary/70",
+  "hover:bg-primary/12 hover:text-primary hover:border-primary/20 transition-colors",
+].join(" ");
+
+const WELCOME_SECONDARY_BUTTON_CLASS = [
+  "flex items-center gap-1.5 px-4 h-7 rounded-md",
+  "border border-foreground/8 dark:border-white/8",
+  "text-xs text-foreground/40",
+  "hover:text-foreground/60 hover:border-foreground/15 hover:bg-foreground/3 dark:hover:bg-white/3 transition-colors",
+].join(" ");
+
 function makeContentHash(content: string): string {
   return String(content.length) + "-" + content.slice(0, 50);
 }
@@ -721,7 +756,7 @@ export default function PersonalNotesView({
                           role="button"
                           tabIndex={-1}
                           onClick={(e) => e.stopPropagation()}
-                          className="h-4 w-4 flex items-center justify-center rounded-sm opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity absolute right-1.5 text-foreground/25 hover:text-foreground/50 cursor-pointer"
+                          className={FOLDER_CONTEXT_TRIGGER_CLASS}
                         >
                           <MoreHorizontal size={11} />
                         </span>
@@ -883,14 +918,14 @@ export default function PersonalNotesView({
                 <div className="flex flex-col gap-1.5 w-full max-w-36">
                   <button
                     onClick={handleNewNote}
-                    className="flex items-center justify-center gap-1.5 h-6 rounded-md bg-primary/8 dark:bg-primary/10 border border-primary/12 dark:border-primary/15 text-xs font-medium text-primary/70 hover:bg-primary/12 hover:text-primary hover:border-primary/20 transition-colors"
+                    className={EMPTY_PRIMARY_BUTTON_CLASS}
                   >
                     <Plus size={10} />
                     {t("notes.empty.createNote")}
                   </button>
                   <button
                     onClick={() => setShowAddNotesDialog(true)}
-                    className="flex items-center justify-center gap-1.5 h-6 rounded-md border border-foreground/8 dark:border-white/8 text-xs text-foreground/40 hover:text-foreground/60 hover:border-foreground/15 hover:bg-foreground/3 dark:hover:bg-white/3 transition-colors"
+                    className={EMPTY_SECONDARY_BUTTON_CLASS}
                   >
                     {t("notes.addToFolder.addExisting")}
                   </button>
@@ -1127,14 +1162,14 @@ export default function PersonalNotesView({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleNewNote}
-                    className="flex items-center gap-1.5 px-4 h-7 rounded-md bg-primary/8 dark:bg-primary/10 border border-primary/12 dark:border-primary/15 text-xs font-medium text-primary/70 hover:bg-primary/12 hover:text-primary hover:border-primary/20 transition-colors"
+                    className={WELCOME_PRIMARY_BUTTON_CLASS}
                   >
                     <Plus size={11} />
                     {t("notes.empty.createNote")}
                   </button>
                   <button
                     onClick={() => setShowAddNotesDialog(true)}
-                    className="flex items-center gap-1.5 px-4 h-7 rounded-md border border-foreground/8 dark:border-white/8 text-xs text-foreground/40 hover:text-foreground/60 hover:border-foreground/15 hover:bg-foreground/3 dark:hover:bg-white/3 transition-colors"
+                    className={WELCOME_SECONDARY_BUTTON_CLASS}
                   >
                     {t("notes.addToFolder.addExisting")}
                   </button>

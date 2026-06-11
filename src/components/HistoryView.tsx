@@ -8,6 +8,18 @@ import { formatHotkeyLabel } from "../utils/hotkeys";
 import { formatDateGroup } from "../utils/dateFormatting";
 import { cn } from "./lib/utils";
 import { useUpcomingEvents } from "../hooks/useUpcomingEvents";
+
+const DELETE_ALL_BUTTON = [
+  "flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px]",
+  "text-muted-foreground/60",
+  "opacity-0 group-hover:opacity-100",
+  "hover:!text-destructive hover:!bg-destructive/8",
+  "dark:hover:!bg-destructive/10",
+  "active:scale-[0.98]",
+  "focus-visible:opacity-100 focus-visible:outline-none",
+  "focus-visible:ring-1 focus-visible:ring-ring/30",
+  "transition-all duration-200",
+].join(" ");
 import UpcomingMeetings from "./UpcomingMeetings";
 import { useSettingsStore } from "../stores/settingsStore";
 
@@ -282,7 +294,7 @@ export default function HistoryView({
                       {index === 0 && (
                         <button
                           onClick={clearAllTranscriptions}
-                          className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] text-muted-foreground/60 opacity-0 group-hover:opacity-100 hover:!text-destructive hover:!bg-destructive/8 dark:hover:!bg-destructive/10 active:scale-[0.98] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring/30 transition-all duration-200"
+                          className={DELETE_ALL_BUTTON}
                         >
                           <Trash2 size={11} />
                           <span>{t("controlPanel.history.clearAll")}</span>
