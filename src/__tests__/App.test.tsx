@@ -137,13 +137,13 @@ describe("App component — TDZ regression & resize states", () => {
     render(<App />);
     const container = document.querySelector(".dictation-window") as HTMLElement;
     expect(container).toBeTruthy();
-    expect(container.style.background).toBe("rgba(14, 14, 18, 0.92)");
+    expect(container.className).toContain("bg-[rgba(14,14,18,0.92)]");
   });
 
   it("shows transparent background when idle", () => {
     render(<App />);
     const container = document.querySelector(".dictation-window") as HTMLElement;
     expect(container).toBeTruthy();
-    expect(container.style.background).toBe("transparent");
+    expect(container.className).toContain("bg-transparent");
   });
 });

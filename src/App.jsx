@@ -273,7 +273,6 @@ export default function App() {
       default:
         return {
           className: `${baseClasses} bg-black/50 cursor-pointer`,
-          style: { transform: "scale(0.8)" },
           tooltip: t("app.mic.clickToSpeak"),
         };
     }
@@ -283,15 +282,9 @@ export default function App() {
 
   return (
     <div
-      className="dictation-window"
-      style={{
-        borderRadius: 12,
-        overflow: "hidden",
-        background: isRecording || isProcessing
-          ? "rgba(14, 14, 18, 0.92)"
-          : "transparent",
-        transition: "background 0.25s ease-out",
-      }}
+      className={`dictation-window rounded-xl overflow-hidden transition-colors duration-300 ${
+        isRecording || isProcessing ? "bg-[rgba(14,14,18,0.92)]" : "bg-transparent"
+      }`}
     >
       {/* Voice button - position determined by panelStartPosition setting */}
       <div
@@ -384,29 +377,24 @@ export default function App() {
               }}
               onFocus={() => setIsHovered(true)}
               onBlur={() => setIsHovered(false)}
-              className={micProps.className}
-              style={{
-                ...micProps.style,
-                cursor:
-                  micState === "processing"
-                    ? "not-allowed !important"
-                    : isDragging
-                      ? "grabbing !important"
-                      : "pointer !important",
-                transition:
-                  "transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease-out",
-              }}
+              className={`${micProps.className} transition-all duration-300 ${
+                micState === "processing"
+                  ? "cursor-not-allowed"
+                  : isDragging
+                    ? "cursor-grabbing"
+                    : "cursor-pointer"
+              }`}
             >
               {/* Background effects */}
               <div
-                className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent transition-opacity duration-150"
-                style={{ opacity: micState === "hover" ? 0.8 : 0 }}
+                className={`absolute inset-0 bg-gradient-to-br from-white/10 to-transparent transition-opacity duration-150 ${
+                  micState === "hover" ? "opacity-80" : "opacity-0"
+                }`}
               ></div>
               <div
-                className="absolute inset-0 transition-colors duration-150"
-                style={{
-                  backgroundColor: micState === "hover" ? "rgba(0,0,0,0.1)" : "transparent",
-                }}
+                className={`absolute inset-0 transition-colors duration-150 ${
+                  micState === "hover" ? "bg-black/10" : "bg-transparent"
+                }`}
               ></div>
 
               {/* Dynamic content based on state */}
