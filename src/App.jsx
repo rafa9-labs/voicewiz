@@ -332,10 +332,20 @@ export default function App() {
         transition: "background 0.25s ease-out",
       }}
     >
-      <RecordingHUD isRecording={isRecording} isProcessing={isProcessing} />
+      <RecordingHUD
+        isRecording={isRecording}
+        isProcessing={isProcessing}
+        align={
+          panelStartPosition === "bottom-left"
+            ? "left"
+            : panelStartPosition === "center"
+              ? "center"
+              : "right"
+        }
+      />
       {/* Voice button - position determined by panelStartPosition setting */}
       <div
-        className={`fixed bottom-0 z-50 ${
+        className={`${isRecording || isProcessing ? "bottom-6" : "bottom-0"} fixed z-50 transition-[bottom] duration-300 ease-out ${
           panelStartPosition === "bottom-left"
             ? "left-2"
             : panelStartPosition === "center"

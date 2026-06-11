@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Mic, Loader2 } from "lucide-react";
 
 interface RecordingHUDProps {
   isRecording: boolean;
   isProcessing: boolean;
+  align?: "left" | "center" | "right";
 }
 
 function formatDuration(sec: number) {
@@ -12,7 +12,7 @@ function formatDuration(sec: number) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export default function RecordingHUD({ isRecording, isProcessing }: RecordingHUDProps) {
+export default function RecordingHUD({ isRecording, isProcessing, align = "right" }: RecordingHUDProps) {
   const [duration, setDuration] = useState(0);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -37,19 +37,16 @@ export default function RecordingHUD({ isRecording, isProcessing }: RecordingHUD
 
   if (!isRecording && !isProcessing) return null;
 
+  const alignClass =
+    align === "left"
+      ? "left-2"
+      : align === "center"
+        ? "left-1/2 -translate-x-1/2"
+        : "right-2";
+
   return (
-    <div className="fixed inset-x-0 top-3 z-50 flex flex-col items-center pointer-events-none">
-      <div className="relative flex items-center justify-center">
-        {isRecording ? (
-          <>
-            <Mic className="size-8 text-white animate-pulse drop-shadow-lg" />
-            <span className="absolute -top-0.5 -right-0.5 size-2 bg-red-500 rounded-full shadow-md" />
-          </>
-        ) : (
-          <Loader2 className="size-8 text-white/60 animate-spin drop-shadow-lg" />
-        )}
-      </div>
-      <span className="text-[11px] font-mono tabular-nums text-white/40 mt-1.5 min-w-[3ch] text-center">
+    <div className={`fixed bottom-2 z-50 pointer-events-none ${alignClass}`}>
+      <span className="text-[11px] font-mono tabular-nums text-white/40 min-w-[3ch] text-center block">
         {formatDuration(duration)}
       </span>
     </div>
