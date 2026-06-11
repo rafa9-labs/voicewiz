@@ -13,6 +13,7 @@ import { useTheme } from "./hooks/useTheme";
 const ControlPanel = React.lazy(() => import("./components/ControlPanel.tsx"));
 const OnboardingFlow = React.lazy(() => import("./components/OnboardingFlow.tsx"));
 const AgentOverlay = React.lazy(() => import("./components/AgentOverlay.tsx"));
+const FirstRunWizard = React.lazy(() => import("./components/FirstRunWizard.tsx"));
 
 export default function AppRouter() {
   useTheme();
@@ -39,6 +40,7 @@ function MainApp() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [needsReauth, setNeedsReauth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showFirstRun, setShowFirstRun] = useState(false);
 
   const isAgentPanel = window.location.search.includes("agent=true");
   const isControlPanel =
@@ -62,6 +64,7 @@ function MainApp() {
     if (!authLoaded) return;
 
     const onboardingCompleted = localStorage.getItem("onboardingCompleted") === "true";
+    const firstRunComplete = localStorage.getItem("firstRunWizardComplete") === "true";
     const authSkipped =
       localStorage.getItem("authenticationSkipped") === "true" ||
       localStorage.getItem("skipAuth") === "true";
@@ -71,6 +74,12 @@ function MainApp() {
 
     if (isReturningUser) {
       localStorage.setItem("onboardingCompleted", "true");
+    }
+
+    if (!firstRunComplete && !onboardingCompleted) {
+      setShowFirstRun(true);
+      setIsLoading(false);
+      return;
     }
 
     const resolved = localStorage.getItem("onboardingCompleted") === "true";
@@ -103,6 +112,14 @@ function MainApp() {
     return (
       <Suspense fallback={<LoadingFallback />}>
         <AgentOverlay />
+      </Suspense>
+    );
+  }
+
+  if (showFirstRun) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <FirstRunWizard onComplete={() => setShowFirstRun(false)} />
       </Suspense>
     );
   }

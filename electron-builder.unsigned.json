@@ -1,10 +1,14 @@
 {
   "extends": "electron-builder.json",
   "win": {
-    "azureSignOptions": null
+    "target": ["portable"],
+    "azureSignOptions": null,
+    "forceCodeSigning": false,
+    "signtoolOptions": null
   },
   "mac": {
     "identity": null,
-    "notarize": false
+    "notarize": false,
+    "forceCodeSigning": false
   }
 }

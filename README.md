@@ -1,125 +1,103 @@
-# VoiceWiz — Fully Local Voice Dictation
+# VoiceWiz
 
-100% offline, zero cloud dependencies. Speak → Transcribe → Paste at cursor.  
-Press **Win+Ctrl**, speak, release. Your words appear where you're typing.
+Fully local desktop dictation with CUDA GPU acceleration. No cloud services, no accounts, no data leaves your PC.
 
-No API keys. No accounts. No data leaves your machine.
+## Features
 
----
+- **100% Local** — Whisper.cpp runs on your machine. No API keys, no cloud accounts.
+- **CUDA GPU Acceleration** — Auto-detects NVIDIA GPU at startup; falls back to CPU.
+- **Push-to-Talk** — Global hotkey (Ctrl+Win by default) to start/stop dictation.
+- **AI Agent** — Optional local LLM for command processing (e.g., "select all, bold, make blue").
+- **Transcription History** — Searchable local database of past dictations.
+- **Cross-Platform** — Windows, macOS, Linux.
 
-## Quick Start (3 commands)
+## Download
 
-```
+Grab the latest installer from the [Releases page](https://github.com/rafa9-labs/voicewiz/releases).
+
+### Windows
+
+Download `VoiceWiz Setup X.X.X.exe` and run it. SmartScreen may show a warning (the installer is unsigned; click "More info" → "Run anyway").
+
+### macOS / Linux
+
+Pre-built installers are also available on the Releases page for each platform.
+
+## Quick Start
+
+1. Install VoiceWiz and launch it.
+2. The **First-Run Wizard** will walk you through downloading a speech recognition model.
+   - **Base** (142MB) is recommended — good balance of speed and accuracy.
+   - For better accuracy choose **Small** (466MB) or **Turbo** (1.6GB).
+3. After the model downloads, the main app opens.
+4. Press **Ctrl+Win** (default hotkey) to start dictating. Press again to stop and paste.
+5. To change settings or pick a different model, open the Control Panel from the system tray.
+
+### System Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| CPU | Any x64 | Any x64 |
+| RAM | 4GB | 8GB+ |
+| Storage | 500MB free | 2GB+ free (for models) |
+| GPU (optional) | — | NVIDIA with 4GB+ VRAM |
+| OS | Windows 10+, macOS 13+, Linux (x64) | Windows 11 |
+
+## Building from Source
+
+Requires Node.js 24.
+
+```bash
 git clone https://github.com/rafa9-labs/voicewiz.git
 cd voicewiz
 npm install
-```
 
-Then download the whisper model and CUDA binary:
-
-```
-npm run download:whisper-cpp
-npm run download:cuda-whisper
-```
-
-Create `.env` in the project root:
-
-```
-WHISPER_CUDA_ENABLED=true
-```
-
-Launch:
-
-```
+# Development (requires existing whisper binary)
 npm run dev
+
+# Production build (Windows)
+npm run build:win
+
+# Production build (macOS)
+npm run build:mac
+
+# Production build (Linux)
+npm run build:linux
 ```
 
-Press **Win+Ctrl** to dictate. The mic button turns red when recording.
+### Build Output
 
-> **First launch**: Go to Settings → Speech-to-Text to download a whisper model  
-> (turbo — 1.5GB recommended). The app preloads it on startup so subsequent  
-> dictation is instant.
+- `dist/win-unpacked/` — Unpacked app directory (portable).
+- `dist/VoiceWiz Setup X.X.X.exe` — NSIS installer (Windows).
 
----
+### Prebuild Scripts
 
-## GPU / CUDA
+Before packaging, the `prebuild` scripts download all required binaries:
 
-CUDA acceleration drops transcription time from 30-60s (CPU) to <1s (GPU).
+- `whisper-cpp` (CPU inference)
+- `whisper-cuda` (GPU-accelerated inference, ~1.2GB)
+- `sherpa-onnx` (NVIDIA Parakeet support)
+- `llama-server` (local LLM for AI agent)
+- `qdrant` (local semantic search)
+- Native key listeners and utilities
 
-| Command | What it does |
-|---------|-------------|
-| `npm run download:cuda-whisper` | Downloads CUDA whisper-server + DLLs |
-| Set `WHISPER_CUDA_ENABLED=true` in `.env` | Enables GPU inference |
+These are also available as individual npm scripts:
 
-Works on NVIDIA GPUs with 4GB+ VRAM (tested on RTX 2070 Super 8GB, RTX 3090 24GB).
-
----
-
-## Models
-
-| Model | Size | VRAM (GPU) | Speed | Accuracy |
-|-------|------|-----------|-------|----------|
-| `tiny` | 75 MB | ~113 MB | Fastest | Basic |
-| `base` | 142 MB | ~213 MB | Fast | Good |
-| `small` | 466 MB | ~700 MB | Balanced | Better |
-| `turbo` | 1.5 GB | ~2.4 GB | Fast | Near-best |
-| `large` | 3 GB | ~4.5 GB | Slower | Best |
-
-**Recommendation**: `turbo` for 8GB+ GPUs. `small` for 4GB GPUs or instant-first setups.
-
-All models run locally — no cloud, no API, no internet.
-
----
-
-## Customizations (over upstream OpenWhispr)
-
-- **All cloud/paid features removed** — no API URLs, no billing, no telemetry
-- **CUDA optimized pipeline** — keep-alive HTTP, auto thread config, no-context mode
-- **On-screen recording HUD** — visual indicator while recording
-- **VAD disabled for push-to-talk** — faster dictation (no silence scanning)
-- **Benchmark script** — `node scripts/benchmark-pipeline.js` measures your GPU speed
-- **Test suite** — `npm run test` (13 tests), `npm run typecheck`
-
----
-
-## Benchmarks
-
-Run the pipeline benchmark to measure your hardware:
-
-```
-node scripts/benchmark-pipeline.js
+```bash
+npm run download:whisper-cpp
+npm run download:cuda-whisper:resources
+npm run download:sherpa-onnx
 ```
 
-Example output (RTX 3090, turbo model):
-```
-Avg infer:  1ms
-Status:     GPU (CUDA)
-Server:     1443ms startup
-```
+## Tech Stack
 
----
-
-## Troubleshooting
-
-| Symptom | Fix |
-|---------|-----|
-| `cuda: false` in startup log | CUDA binary not in `%APPDATA%/open-whispr/bin/` — run `npm run download:cuda-whisper` |
-| `OpenWhispr API URL not configured` | Fixed in this fork — returns local defaults silently |
-| Slow transcription (30s+) | CUDA not enabled — check `.env` has `WHISPER_CUDA_ENABLED=true` |
-| No audio detected | Check microphone permissions in Windows Settings |
-| Hotkey not working | Try restarting the app; Win+Ctrl is reserved but should work |
-
----
-
-## Requirements
-
-- **OS**: Windows 10/11 (x64) · macOS · Linux
-- **Node.js**: v24+
-- **GPU**: NVIDIA (optional, for CUDA) — 4GB+ VRAM recommended
-- **Disk**: ~2GB for models + binary
-
----
+- **Frontend**: React 19, TypeScript, Tailwind CSS v4, Vite
+- **Desktop**: Electron 41
+- **Speech**: Whisper.cpp (local), NVIDIA Parakeet (local), OpenAI API (optional cloud)
+- **AI Agent**: Llama.cpp (local), OpenAI/Anthropic/Gemini (optional cloud)
+- **Search**: Qdrant vector DB + ONNX MiniLM embeddings (local semantic search)
+- **Database**: SQLite via better-sqlite3
 
 ## License
 
-MIT — based on [OpenWhispr](https://github.com/OpenWhispr/openwhispr).
+MIT © Rafael (rafa9-labs)

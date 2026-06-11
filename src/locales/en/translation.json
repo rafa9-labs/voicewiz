@@ -225,6 +225,24 @@
       "continue": "Continue anyway"
     }
   },
+  "firstRun": {
+    "welcome": {
+      "title": "Welcome to VoiceWiz",
+      "description": "Everything runs 100% locally on your PC. No cloud accounts, no data leaves your computer.",
+      "getStarted": "Get Started"
+    },
+    "model": {
+      "title": "Choose a Model",
+      "description": "Select a speech recognition model to download. Larger models are more accurate but slower.",
+      "continue": "Continue",
+      "downloadRequired": "Please download a model to continue"
+    },
+    "done": {
+      "title": "You're All Set!",
+      "description": "Your {{model}} model is ready to use.",
+      "launch": "Start Using VoiceWiz"
+    }
+  },
   "streaming": {
     "errors": {
       "cloudUnreachable": {
