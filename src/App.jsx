@@ -173,9 +173,21 @@ export default function App() {
     }
   }, [isCommandMenuOpen, isHovered, toastCount, setWindowInteractivity]);
 
+  const handleDictationToggle = React.useCallback(() => {
+    setIsCommandMenuOpen(false);
+    setWindowInteractivity(false);
+  }, [setWindowInteractivity]);
+
+  const { isRecording, isProcessing, toggleListening, cancelRecording, cancelProcessing } =
+    useAudioRecording(toast, {
+      onToggle: handleDictationToggle,
+    });
+
   useEffect(() => {
     const resizeWindow = () => {
-      if (isCommandMenuOpen && toastCount > 0) {
+      if (isRecording || isProcessing) {
+        window.electronAPI?.resizeMainWindow?.("RECORDING");
+      } else if (isCommandMenuOpen && toastCount > 0) {
         window.electronAPI?.resizeMainWindow?.("EXPANDED");
       } else if (isCommandMenuOpen) {
         window.electronAPI?.resizeMainWindow?.("WITH_MENU");
@@ -186,17 +198,7 @@ export default function App() {
       }
     };
     resizeWindow();
-  }, [isCommandMenuOpen, toastCount]);
-
-  const handleDictationToggle = React.useCallback(() => {
-    setIsCommandMenuOpen(false);
-    setWindowInteractivity(false);
-  }, [setWindowInteractivity]);
-
-  const { isRecording, isProcessing, toggleListening, cancelRecording, cancelProcessing } =
-    useAudioRecording(toast, {
-      onToggle: handleDictationToggle,
-    });
+  }, [isRecording, isProcessing, isCommandMenuOpen, toastCount]);
 
   // Sync auto-hide from main process — setState directly to avoid IPC echo
   useEffect(() => {
@@ -319,16 +321,26 @@ export default function App() {
   const micProps = getMicButtonProps();
 
   return (
-    <div className="dictation-window">
+    <div
+      className="dictation-window"
+      style={{
+        borderRadius: 12,
+        overflow: "hidden",
+        background: isRecording || isProcessing
+          ? "rgba(14, 14, 18, 0.92)"
+          : "transparent",
+        transition: "background 0.25s ease-out",
+      }}
+    >
       <RecordingHUD isRecording={isRecording} isProcessing={isProcessing} />
       {/* Voice button - position determined by panelStartPosition setting */}
       <div
-        className={`fixed bottom-1 z-50 ${
+        className={`fixed bottom-0 z-50 ${
           panelStartPosition === "bottom-left"
-            ? "left-1"
+            ? "left-2"
             : panelStartPosition === "center"
               ? "left-1/2 -translate-x-1/2"
-              : "right-1"
+              : "right-2"
         }`}
       >
         <div

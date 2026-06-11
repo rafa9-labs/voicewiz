@@ -144,6 +144,7 @@ class WindowManager {
     const newSize = WINDOW_SIZES[sizeKey] || WINDOW_SIZES.BASE;
     const currentBounds = this.mainWindow.getBounds();
     const position = this._panelStartPosition;
+    const MARGIN = sizeKey === "RECORDING" ? 60 : 4;
 
     const display = screen.getDisplayNearestPoint({
       x: currentBounds.x + currentBounds.width / 2,
@@ -170,8 +171,8 @@ class WindowManager {
     }
 
     // Clamp to work area
-    newX = Math.max(workArea.x, Math.min(newX, workArea.x + workArea.width - newSize.width));
-    newY = Math.max(workArea.y, Math.min(newY, workArea.y + workArea.height - newSize.height));
+    newX = Math.max(workArea.x, Math.min(newX, workArea.x + workArea.width - newSize.width - MARGIN));
+    newY = Math.max(workArea.y, Math.min(newY, workArea.y + workArea.height - newSize.height - MARGIN));
 
     this.mainWindow.setBounds({
       x: newX,

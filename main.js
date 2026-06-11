@@ -1522,12 +1522,12 @@ if (gotSingleInstanceLock) {
     });
 
   app.on("window-all-closed", () => {
-    // Don't quit on macOS when all windows are closed
-    // The app should stay in the dock/menu bar
-    if (process.platform !== "darwin") {
-      app.quit();
+    // Keep the app alive across all platforms — the tray and recording process
+    // must continue running even when both windows are closed/hidden.
+    // The only way to quit is via tray menu → Quit.
+    if (debugLogger) {
+      debugLogger.debug("All windows closed — keeping app alive (tray still active)");
     }
-    // On macOS, keep the app running even without windows
   });
 
   app.on("browser-window-focus", (event, window) => {
