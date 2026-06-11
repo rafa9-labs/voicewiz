@@ -872,10 +872,12 @@ async function startApp() {
   });
 
   // Non-blocking server pre-warming
+  const cudaDownloaded = whisperCudaManager?.isDownloaded() || false;
+  const cudaEnabled = process.env.WHISPER_CUDA_ENABLED !== "false" && cudaDownloaded;
   const whisperSettings = {
     localTranscriptionProvider: process.env.LOCAL_TRANSCRIPTION_PROVIDER || "",
     whisperModel: process.env.LOCAL_WHISPER_MODEL,
-    useCuda: process.env.WHISPER_CUDA_ENABLED === "true" && whisperCudaManager?.isDownloaded(),
+    useCuda: cudaEnabled,
   };
   whisperManager.initializeAtStartup(whisperSettings).catch((err) => {
     debugLogger.debug("Whisper startup init error (non-fatal)", { error: err.message });

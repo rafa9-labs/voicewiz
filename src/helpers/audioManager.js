@@ -659,6 +659,20 @@ registerProcessor("pcm-streaming-processor", PCMStreamingProcessor);
         result?.timings?.transcriptionProcessingDurationMs ?? null;
 
       logger.info("Pipeline timing", timingData, "performance");
+
+      // Console-friendly perf summary (visible at default log level)
+      const total = roundTripDurationMs;
+      const whisperMs = result?.timings?.transcriptionProcessingDurationMs ?? null;
+      const convertMs = result?.timings?.audioConversionDurationMs ?? null;
+      const cleanupMs = result?.timings?.reasoningProcessingDurationMs ?? null;
+      const parts = [];
+      if (whisperMs != null) parts.push(`whisper=${whisperMs}ms`);
+      if (convertMs != null && convertMs > 0) parts.push(`ffmpeg=${convertMs}ms`);
+      if (cleanupMs != null && cleanupMs > 0) parts.push(`cleanup=${cleanupMs}ms`);
+      parts.push(`total=${total}ms`);
+      console.info(
+        `[VoiceWiz] Transcription complete (${activeModel}) — ${parts.join(", ")} — "${result?.text?.slice(0, 50) || ""}"`
+      );
     } catch (error) {
       const errorAtMs = Math.round(performance.now() - pipelineStart);
 

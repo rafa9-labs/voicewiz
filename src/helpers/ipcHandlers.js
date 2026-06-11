@@ -1667,8 +1667,8 @@ class IPCHandlers {
     });
 
     ipcMain.handle("whisper-server-start", async (event, modelName) => {
-      const useCuda =
-        process.env.WHISPER_CUDA_ENABLED === "true" && this.whisperCudaManager?.isDownloaded();
+      const cudaDownloaded = this.whisperCudaManager?.isDownloaded() || false;
+      const useCuda = process.env.WHISPER_CUDA_ENABLED !== "false" && cudaDownloaded;
       return this.whisperManager.startServer(modelName, { useCuda });
     });
 
@@ -1717,8 +1717,9 @@ class IPCHandlers {
             const modelName = this.whisperManager.currentServerModel;
             await this.whisperManager.stopServer();
             if (modelName) {
+              const cudaDownloaded = this.whisperCudaManager?.isDownloaded() || false;
               await this.whisperManager.startServer(modelName, {
-                useCuda: !!process.env.WHISPER_CUDA_ENABLED,
+                useCuda: process.env.WHISPER_CUDA_ENABLED !== "false" && cudaDownloaded,
               });
             }
           }

@@ -428,6 +428,9 @@ class WhisperServerManager extends EventEmitter {
       model: path.basename(modelPath),
       cuda: this.useCuda,
     });
+    console.info(
+      `[VoiceWiz] whisper-server ready on port ${this.port} — ${path.basename(modelPath)} — CUDA=${this.useCuda ? "ON (GPU)" : "OFF (CPU)"}`
+    );
   }
 
   async waitForReady(getProcessInfo) {
