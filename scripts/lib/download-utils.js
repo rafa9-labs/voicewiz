@@ -27,7 +27,7 @@ function fetchJson(url, redirectCount = 0) {
     };
 
     // Use GitHub token if available (increases rate limit from 60 to 5000/hour)
-    const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+    const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
     if (token) {
       headers.Authorization = `Bearer ${token}`;
     }

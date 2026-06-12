@@ -1,6 +1,6 @@
 {
   "name": "open-whispr",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "VoiceWiz — fully local desktop dictation with CUDA GPU acceleration, no cloud or accounts needed",
   "main": "main.js",
   "private": true,
